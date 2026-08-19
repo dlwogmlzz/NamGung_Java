@@ -68,4 +68,26 @@ for(int i=0; i<num.length; i++) { newNum[i = num[i]; }    // 배열을 하나씩
 →　System.arraycopy(num, 0, newNum, 0, num.length);       // num[0]에서 newNum[0]으로 num.length개의 데이터를 복사
 
 * 배열의 활용
+* String 배열
+String[] name = new String[3];
+  name[0] = "Kim";
+  name[1] = "Lee";
+  name[2] = "Yi";
 
+* String 클래스
+ - char배열에 기능(메서드)을 추가한 것
+
+1. charAt() - 문자 하나 꺼내기, substring() - 문자열 일부분 자르기
+
+String str = "ABCDE";       // A0 B1 C2 D3 E4
+char ch = str.charAt(3);    // 문자열 str의 4번째 문자 'D'를 ch에 저장, charAt() - 문자를 하나 꺼내는 메서드
+
+String str2 = "012345";
+String tmp = str.substring(1,4);    // str에서 index범위 1~4의 문자들을 반환, 1에서 4의 전까지
+System.out.println(tmp);            // "123"이 출력됨
+
+2. char배열로 변환
+
+char[] chArr = { 'A', 'B', 'C' };
+String str = new String(chArr);     // char배열 → String
+char[] tmp = str.toCharArray();     // String → char배열
