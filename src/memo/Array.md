@@ -67,4 +67,5 @@ System.arraycopy() - 배열을 하나씩이 아니고 한번에 복사 가능
 for(int i=0; i<num.length; i++) { newNum[i = num[i]; }    // 배열을 하나씩 담는다...
 →　System.arraycopy(num, 0, newNum, 0, num.length);       // num[0]에서 newNum[0]으로 num.length개의 데이터를 복사
 
+* 배열의 활용
 
