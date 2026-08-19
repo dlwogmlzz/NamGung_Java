@@ -91,3 +91,31 @@ System.out.println(tmp);            // "123"이 출력됨
 char[] chArr = { 'A', 'B', 'C' };
 String str = new String(chArr);     // char배열 → String
 char[] tmp = str.toCharArray();     // String → char배열
+
+* 다차원 배열
+int[][] score = new int[4][3]; // 4행 3열의 2차원 배열을 생성
+
+* 다차원 배열 - 초기화
+int[][] score = { 
+    { 100, 100, 100 }
+   ,{ 200, 200, 200 }
+   ,{ 300, 300, 300 }
+   ,{ 400, 400, 400 }
+   ,{ 500, 500, 500 }
+};
+
+// 2차원 배열 score의 모든 요소를 10으로 초기화한다.
+
+for (int i = 0; i < score.length; i++) {
+    for (int j = 0; j < score[i].length; j++) {
+        score[i][j] = 10;
+    }
+}
+
+* 다차원 배열 - 가변 배열, 열길이가 다름.
+int[][] score = new int[5][];
+  score[0] = new int[4];    // 열이 4칸인
+  score[1] = new int[3];    // 열이 3칸인
+  score[2] = new int[2];    // 열이 2칸인
+  score[3] = new int[2];    // 열이 2칸인
+  score[4] = new int[3];    // 열이 3칸인
