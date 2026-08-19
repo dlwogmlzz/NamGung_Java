@@ -38,6 +38,6 @@ while() { // 에러. 조건식이 없음.
     ...
 }
 
-* continue문 - 다음 반복으로 건너뛰기 - FlowEx32.java
+* continue문 - 다음 반복으로 건너뛰기
 
-* 이름 붙인 반복문(labeled for) - FlowEx34.java
+* 이름 붙인 반복문(labeled for)

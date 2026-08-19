@@ -1,3 +1,5 @@
+package exercise;
+
 public class OperatorEx6 {
     public static void main(String[] args) {
         byte a = 10;

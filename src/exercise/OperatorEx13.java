@@ -1,3 +1,5 @@
+package exercise;
+
 public class OperatorEx13 {
     public static void main(String[] args) {
         char c1 = 'a';

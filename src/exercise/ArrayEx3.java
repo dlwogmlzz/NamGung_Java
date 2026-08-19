@@ -1,3 +1,5 @@
+package exercise;
+
 // 배열의 총합과 평균
 public class ArrayEx3 {
     public static void main(String[] args) {

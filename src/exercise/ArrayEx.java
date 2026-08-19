@@ -1,3 +1,5 @@
+package exercise;
+
 public class ArrayEx {
     public static void main(String[] args) {
         int[] score = new int[5]; // 길이가 5인 int배열

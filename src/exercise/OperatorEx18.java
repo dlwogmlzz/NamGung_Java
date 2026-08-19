@@ -1,3 +1,5 @@
+package exercise;
+
 public class OperatorEx18 {
     public static void main(String[] args) {
         // 반올림, Math.round() - 소숫점 첫째자리 반올림.

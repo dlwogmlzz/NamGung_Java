@@ -1,3 +1,5 @@
+package exercise;
+
 import java.util.Arrays;
 
 // 배열 정렬하기, 버블정렬

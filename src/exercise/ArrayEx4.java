@@ -1,3 +1,5 @@
+package exercise;
+
 // 배열의 최대값과 최소값
 public class ArrayEx4 {
     public static void main(String[] args) {

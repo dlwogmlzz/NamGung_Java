@@ -1,3 +1,5 @@
+package exercise;
+
 public class VarEx2 {
     // x, y 값 변경하기.
     public static void main(String[] args) {

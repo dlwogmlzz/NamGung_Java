@@ -1,3 +1,5 @@
+package exercise;
+
 public class VarEx {
     public static void main(String[] args) {
         int age; // 1. 변수 선언 - 저장 공간 만들기

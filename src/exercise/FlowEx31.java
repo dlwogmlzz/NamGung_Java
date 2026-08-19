@@ -1,3 +1,5 @@
+package exercise;
+
 public class FlowEx31 {
     public static void main(String[] args) {
         int sum = 0;

@@ -1,3 +1,5 @@
+package exercise;
+
 // 배열 - 빈도수 구하기, 랜덤으로 10개의 수를 받아서 그수가 몇개 인지 세는 코드
 public class ArrayEx8 {
     public static void main(String[] args) {

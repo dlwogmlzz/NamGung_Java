@@ -1,3 +1,5 @@
+package exercise;
+
 // 이름 붙인 반복문(labeled for)
 public class FlowEx34 {
     public static void main(String[] args) {

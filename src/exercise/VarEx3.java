@@ -1,3 +1,5 @@
+package exercise;
+
 public class VarEx3 {
     public static void main(String[] args) {
         final int MAX_VALUE = 100; // 상수, 값이 바뀌지 않는다.
