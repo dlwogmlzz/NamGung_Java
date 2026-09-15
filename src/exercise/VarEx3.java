@@ -18,11 +18,11 @@ public class VarEx3 {
 
         // 텍스트 블락은 닫는 """ 따옴표 위치가 어디냐에 따라서 처음부터 끝의 범위까지가 공백으로 들어감
         // 처음 """이후에 개행을 해야 됨, 안하면 에러.
-        String block = """
-                Hello
-                world
-                zzzz
-        """;
-        System.out.println(block);
+        // String block = """
+        //        Hello
+        //        world
+        //        zzzz
+        //""";
+        //System.out.println(block);
     }
 }
