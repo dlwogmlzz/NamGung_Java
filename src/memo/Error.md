@@ -35,3 +35,57 @@ try {   * catch블럭 내에 포함된 문장이 하나뿐이어도 괄호{}를 
  - 예외가 발생하면, 이를 처리할 catch블럭을 찾아 내려감
  - 일치하는 catch블럭이 없으면, 예외는 처리 안됨.
  - Exception이 선언된 catch블럭은 모든 예외 처리(마지막 catch블럭)
+
+
+# printStackTrace()와 getMessage()
+
+printStackTrace() : 예외발생 당시의 호출스택(Call Stack)에 있었던 메서드의 정보와 예외 메시지를 화면에 출력한다.
+getMessage() : 발생한 예외클래스의 인스턴스에 저장된 메시지를 얻을 수 있다.
+
+
+
+# 멀티 catch블럭
+ - 내용이 같은 catch블럭을 하나로 합친 것(JDK1.7 부터)
+
+try {
+    ...
+} catch (ExceptionA e) {
+    e.printStackTrace();
+} catch (ExceptionB e2) {
+    e2.printStackTrace();
+} 
+
+↓
+
+try {
+    ...
+} catch (ExceptionA | ExceptionB e) {   // 동일 내용 중복 제거 그외 다른 내용은 제거 안됨, 부모 자식관계 일때는 부모만 쓰면됨. 
+    e.printStackTrace();
+}
+
+
+# 예외 발생시키기
+
+ 1. 연산자 new를 이용해서 발생시키려는 예외 클래스의 객체를 만든 다음
+    Exception e = new Exception("고의로 발생시켰음");
+    ╰Exception에 예외에 대한 정보가 담겨 있음.
+
+ 2. 키워드 throw를 이용해서 예외를 발생시킨다.
+    throw e;
+
+ 3. 위 1,2 코드를 한번에 할수 있음.
+    throw new Exception("고의로 발생시켰음");
+    ╰컴파일러가 예외 처리 여부를 체크하고, try-catch문(예외처리)이 필수로 있어야함. 안그러면 `컴파일 에러 발생!!`
+    ╰unchecked예외(런타임예외)는 try-catch문이 필요없음
+    
+    public static void main(String[] args) {
+        // throw new Exception("고의로 발생시켰음"); // 컴파일 에러 발생!(`try-catch문이 필수!!`)
+        throw new RuntimeException(); // 컴파일 에러 안뜸(try-catch문이 선택). `런타임 에러가 발생!!`
+    }
+
+# checked예외, unchecked예외
+ - checked예외: 컴파일러가 예외 처리 여부를 체크(예외 처리 필수)
+   ╰Exception과 자손들
+
+ - unchecked예외: 컴파일러가 예외 처리 여부를 체크 안함(예외 처리 선택)
+   ╰RuntimeException과 자손들
