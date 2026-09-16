@@ -89,3 +89,41 @@ try {
 
  - unchecked예외: 컴파일러가 예외 처리 여부를 체크 안함(예외 처리 선택)
    ╰RuntimeException과 자손들
+
+
+# 메서드에 예외 선언하기
+ - 예외를 처리하는 방법: ①try-catch문(직접처리), ②예외 선언하기(예외 떠넘기기, 알리기), ③은폐하기(감추기, 덮기 / 빈 catch블록)
+ - 메서드가 호출시 발생가능한 예외를 호출하는 쪽에 알리는 것
+
+* 사용예
+void method() throws Exception1, Exception2, ... ExceptionN {  // 메서드 선언시에는 throw`s`
+    // 메서드 내용
+}
+
+// method()에서 Exception과 그 자손 예외 발생 가능
+void method() throws Exception {
+    // 메서드 내용
+}
+
+★메서드 안의 예외는 예외처리 필수만 적는다(Exception과 그 자손들)
+
+
+
+# finally 블럭
+
+ - 예외 발생여부와 관계없이 수행되어야 하는 코드를 넣는다.
+ - try블럭 안에 return문이 있어서 try블럭을 벗어나갈 때도 finally블럭이 실행된다.
+ - try-catch문의 코드 중복 제거
+
+
+# 사용자 정의 예외 만들기
+
+ - 우리가 직접 예외 클래스를 정의할 수 있다.
+ - 1. 조상은 Exception과 RuntimeException중에서 선택
+ - 2. String 매개변수가 있는 생성자(super(매개변수))를 넣어줌.
+
+
+# 예외 되던지기(Exception re-throwing)
+
+ - 예외를 처리한 후에 다시 예외를 발생시키는 것
+ - 호출한 메서드와 호출된 메서드 양쪽 모두에게 예외처리하는 것
