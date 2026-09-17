@@ -127,3 +127,16 @@ void method() throws Exception {
 
  - 예외를 처리한 후에 다시 예외를 발생시키는 것
  - 호출한 메서드와 호출된 메서드 양쪽 모두에게 예외처리하는 것
+
+
+# 연결된 예외(chained exception): 어떤 예외를 다른 예외로 감싸는것!!
+ 👉세부적인 예외를 포괄적인 예외로 감쌀때 사용
+ - 한 예외가 다른 예외를 발생시킬 수 있다.
+ - 예외 A가 예외 B를 발생시키면 A는 B의 원인 예외(cause exception)
+ - 이유: 여러 예외를 하나로 묶어서 다루기 위해서
+
+예외선언은 `Exception 자손만`한다. RuntimeException도 하는데 잘 안함.
+
+checked예외를 unchecked예외로 변경할때
+
+throw new `RuntimeException``(`new MemoryException("메모리가 부족합니다.")`)`;
