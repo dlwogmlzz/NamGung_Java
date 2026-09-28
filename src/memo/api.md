@@ -383,3 +383,299 @@ int intVal = Integer.parseInt("100");
 boolean boolVal = Boolean.parseBoolean("true");
 double doubleVal = Double.parseDouble("10.5");
 ```
+
+
+# StringBuffer 클래스
+ - String처럼 문자형 배열(char[])을 내부적으로 가지고 있다.
+
+```java
+public final class StringBuffer implements  java.io.Serializable {
+    private char[] value;
+    ...
+}
+```
+
+ - 그러나, String과 달리 내용을 변경할 수 있다. (mutable)
+   // StringBuffer 객체 생성 예시
+
+   [자바 StringBuffer 메모리 구조 다이어그램]
+   StringBuffer sb = new StringBuffer("abc");
+    ---------------------------------------
+    sb[ 0x100 ] ──> [ a ][ b ][ c ][   ][   ][   ]...
+    (내부 버퍼 배열, 주소: 0x100)
+    ---------------------------------------
+
+
+
+[자바 StringBuffer append 메서드 메모리 구조 정리]
+
+* 핵심 개념
+    - sb.append("123"); 코드는 기존 StringBuffer 객체의 내용 뒤에 새로운 문자열 "123"을 추가한다.
+    - 새로운 객체를 생성하지 않고 기존 메모리 공간(0x100) 내부의 버퍼 배열에 값을 이어 붙이므로 효율적이다.
+
+    // StringBuffer append 코드 예시
+    StringBuffer sb = new StringBuffer("abc");
+    sb.append("`123`"); // sb의 내용 뒤에 "123"을 추가한다.(내용 변경 가능)
+
+* 메모리 구조 다이어그램
+    ---------------------------------------
+    [ sb ] ──> [ 0x100 ] ──> [ a ][ b ][ c ]`[ 1 ][ 2 ][ 3 ]`[   ][   ]...
+    (내부 버퍼 배열, 주소: 0x100)
+    ---------------------------------------
+
+
+
+# StringBuffer의 생성자
+ - 배열은 길이 변경불가. 공간이 부족하면 새로운 배열 생성해야...
+
+
+[자바 배열 확장(System.arraycopy 등)을 위한 메모리 구조 다이어그램]
+
+* 핵심 개념
+    - 기존 배열(arr)은 공간이 부족할 때 더 큰 새로운 배열(tmp)을 생성하여 데이터를 복사해야 합니다.
+    - arr 배열은 주소 0x100에 크기 5로 존재하며 값 [1, 2, 3, 4, 5]를 담고 있습니다.
+    - tmp 배열은 주소 0x200에 더 큰 크기(10)로 새로 생성되어 초기값 0들로 채워져 있습니다.
+
+* 메모리 구조 다이어그램
+-------------------------------------------------------------------------
+arr[ 0x100 ] ──> [ 1 ][ 2 ][ 3 ][ 4 ][ 5 ]
+(주소: 0x100, 크기: 5)
+
+tmp[ 0x200 ] ──> [ 0 ][ 0 ][ 0 ][ 0 ][ 0 ][ 0 ][ 0 ][ 0 ][ 0 ][ 0 ]
+(주소: 0x200, 크기: 10)
+-------------------------------------------------------------------------
+
+
+ - StringBuffer는 저장할 문자열의 길이를 고려해서 적절한 크기로 생성해야...
+
+[자바 StringBuffer 생성자 및 버퍼 크기 초기화 정리]
+
+```java
+// StringBuffer 생성자 내부 구현 예시 코드
+public StringBuffer(int length) {
+value = new char[length];
+shared = false;
+}
+
+public StringBuffer() {
+this(16); // 버퍼의 크기를 지정하지 않으면 버퍼의 크기는 16이 된다.
+}
+
+public StringBuffer(String str) {
+this(str.length() + 16); // 지정한 문자열의 길이보다 16이 더 크게 버퍼를 생성한다.
+append(str);
+}
+```
+
+* public StringBuffer(int length)
+    - 설명: 지정된 크기(length)만큼의 문자 배열(char[]) 버퍼를 생성한다.
+    - 코드 동작: value = new char[length]; shared = false;로 초기화한다.
+
+* public StringBuffer()
+    - 설명: 버퍼의 크기를 지정하지 않으면 기본값으로 16 크기의 버퍼를 생성한다.
+    - 코드 동작: this(16);을 호출하여 크기 16짜리 버퍼를 생성한다.
+
+* public StringBuffer(String str)
+    - 설명: 지정한 문자열(str)의 길이보다 16이 더 크게 버퍼를 생성하고 문자열을 추가한다.
+    - 코드 동작: this(str.length() + 16);을 호출한 뒤 append(str);을 수행한다.
+
+
+# StringBuffer의 변경
+ - StringBuffer는 String과 달리 내용 변경이 가능하다.
+ - append()는 지정된 내용을 StringBuffer에 추가 후, StringBuffer의 참조를 반환
+
+[자바 StringBuffer append 메서드의 참조 반환과 메서드 체이닝 정리]
+
+```java
+// StringBuffer append 참조 반환 및 메서드 체이닝 예시 코드
+StringBuffer sb = new StringBuffer("abc");
+StringBuffer sb2 = sb.append("ZZ"); // sb의 내용 뒤에 "ZZ"를 추가한다.
+
+System.out.println(sb);  // abc123ZZ
+System.out.println(sb2); // abc123ZZ
+
+
+// 메서드 체이닝 활용 예시
+StringBuffer sb = new StringBuffer("abc");
+sb.append("123").append("ZZ");
+```
+
+* 핵심 개념
+    - append() 메서드는 지정된 내용을 StringBuffer에 추가한 후, 자기 자신의 참조를 반환한다.
+    - 따라서 sb.append("ZZ")를 실행하면 sb의 내용 뒤에 "ZZ"가 추가될 뿐만 아니라, sb 객체의 참조 자체가 반환되어 새로운 변수(sb2)에 대입할 수 있다.
+    - 반환된 참조를 이용해 메서드를 연속해서 호출하는 방식인 메서드 체이닝(Method Chaining)이 가능하다.
+
+
+# StringBuffer의 비교
+
+
+[자바 StringBuffer의 비교 메서드 및 주의사항 정리]
+
+* 핵심 개념
+    - StringBuffer는 equals() 메서드가 오버라이딩되어 있지 않다. (Object 클래스의 equals를 그대로 사용하여 주소 비교를 수행함)
+    - 따라서 내용이 같은 두 StringBuffer 객체를 비교할 때 == 연산자와 equals() 모두 false를 반환한다.
+    - 내용을 비교하려면 toString()을 통해 String으로 변환한 후에 equals()를 사용해야 한다.
+
+
+```java
+// StringBuffer 비교 코드 예시
+StringBuffer sb = new StringBuffer("abc");
+StringBuffer sb2 = new StringBuffer("abc");
+
+System.out.println(sb == sb2);      // false (주소 비교)
+System.out.println(sb.equals(sb2)); // false (오버라이딩되지 않아 주소 비교 수행)
+
+// StringBuffer를 String으로 변환하여 내용 비교
+String s = sb.toString();
+String s2 = sb2.toString();
+
+System.out.println(s.equals(s2));   // true (문자열 내용 비교)
+
+```
+
+
+# StringBuffer의 생성자와 메서드
+
+[자바 StringBuffer 생성자 및 append 메서드 다양성 정리]
+
+* StringBuffer()
+    - 설명: 16문자를 담을 수 있는 버퍼를 가진 StringBuffer 인스턴스를 생성한다.
+    - 예제: StringBuffer sb = new StringBuffer(); -> 결과: sb = "" (크기 16의 기본 버퍼 생성)
+
+* StringBuffer(int length)
+    - 설명: 지정된 개수의 문자를 담을 수 있는 버퍼를 가진 StringBuffer 인스턴스를 생성한다.
+    - 예제: StringBuffer sb = new StringBuffer(10); -> 결과: sb = "" (크기 10의 지정 버퍼 생성)
+
+* StringBuffer(String str)
+    - 설명: 지정된 문자열 값(str)을 갖는 StringBuffer 인스턴스를 생성한다.
+    - 예제: StringBuffer sb = new StringBuffer("Hi"); -> 결과: sb = "Hi" (문자열 길이 + 16 크기의 버퍼 생성)
+
+* StringBuffer append(다양한 타입 매개변수)
+    - 설명: 매개변수로 입력된 값을 문자열로 변환하여 StringBuffer 인스턴스가 저장하고 있는 문자열의 뒤에 덧붙인다. 
+    (boolean, char, char 배열, double, float, int, long, Object, String 타입 지원)
+    - 예제: 다양한 형태의 데이터를 연속해서 추가하는 메서드 체이닝을 사용할 수 있다.
+
+```java
+// StringBuffer 생성자 및 append 메서드 활용 코드 예시
+StringBuffer sb1 = new StringBuffer();
+StringBuffer sb2 = new StringBuffer(10);
+StringBuffer sb3 = new StringBuffer("Hi");
+
+StringBuffer sbBase = new StringBuffer("abc");
+StringBuffer sbChained = sbBase.append(true).append(10.0f);
+sbBase.append('d').append(10.0f);
+
+StringBuffer sbFinal = new StringBuffer("abc");
+sbFinal.append("ABC").append(123);
+```
+
+
+[자바 StringBuffer capacity, charAt, delete 메서드 정리]
+
+* int capacity()
+    - 설명: StringBuffer 인스턴스의 버퍼 크기를 알려준다. length()는 버퍼에 담긴 문자열의 길이를 알려준다.
+    - 예제: StringBuffer sb = new StringBuffer(100); 
+    sb.append("abcd"); int bufferSize = sb.capacity(); int stringSize = sb.length(); -> 결과: bufferSize = 100, stringSize = 4 (sb에 담긴 문자열이 "abcd"이므로)
+
+* char charAt(int index)
+    - 설명: 지정된 위치(index)에 있는 문자를 반환한다.
+    - 예제: StringBuffer sb = new StringBuffer("abc"); char c = sb.charAt(2); -> 결과: c = 'c'
+
+* StringBuffer delete(int start, int end)
+    - 설명: 시작위치(start)부터 끝 위치(end) 사이에 있는 문자를 제거한다. 단, 끝 위치의 문자는 제외.
+    - 예제: StringBuffer sb = new StringBuffer("0123456"); StringBuffer sb2 = sb.delete(3, 6); -> 결과: sb = "0126", sb2 = "0126"
+
+* StringBuffer deleteCharAt(int index)
+    - 설명: 지정된 위치(index)의 문자를 제거한다.
+    - 예제: StringBuffer sb = new StringBuffer("0123456"); sb.deleteCharAt(3); -> 결과: sb = "012456"
+
+```java
+// StringBuffer 주요 메서드 코드 예시
+StringBuffer sb1 = new StringBuffer(100);
+sb1.append("abcd");
+int bufSize = sb1.capacity(); // 100
+int strSize = sb1.length();   // 4
+
+StringBuffer sb2 = new StringBuffer("0123456");
+StringBuffer sb3 = sb2.delete(3, 6); // "0126"
+
+StringBuffer sb4 = new StringBuffer("0123456");
+sb4.deleteCharAt(3); // "012456"
+```
+
+[자바 StringBuffer insert, length, replace, reverse 메서드 정리]
+
+* StringBuffer insert(int pos, 타입 변수)
+    - 설명: 두 번째 매개변수로 받은 값을 문자열로 변환하여 지정된 위치(pos)에 추가한다. pos는 0부터 시작한다.
+    - 예제: StringBuffer sb = new StringBuffer("0123456"); sb.insert(4, '.'); -> 결과: sb = "0123.456"
+
+* int length()
+    - 설명: StringBuffer 인스턴스에 저장되어 있는 문자열의 길이를 반환한다.
+    - 예제: StringBuffer sb = new StringBuffer("0123456"); int length = sb.length(); -> 결과: length = 7
+
+* StringBuffer replace(int start, int end, String str)
+    - 설명: 지정된 범위(start~end)의 문자들을 주어진 문자열로 바꾼다. end 위치의 문자는 범위에 포함되지 않는다 (start <= x < end).
+    - 예제: StringBuffer sb = new StringBuffer("0123456"); sb.replace(3, 6, "AB"); -> 결과: sb = "012AB6" ("345"가 "AB"로 바뀜)
+
+* StringBuffer reverse()
+    - 설명: StringBuffer 인스턴스에 저장되어 있는 문자열의 순서를 거꾸로 나열한다.
+    - 예제: StringBuffer sb = new StringBuffer("0123456"); sb.reverse(); -> 결과: sb = "6543210"
+
+
+```java
+// StringBuffer 삽입, 대체, 반전 메서드 코드 예시
+StringBuffer sb1 = new StringBuffer("0123456");
+sb1.insert(4, '.');
+
+StringBuffer sb2 = new StringBuffer("0123456");
+int len = sb2.length();
+
+StringBuffer sb3 = new StringBuffer("0123456");
+sb3.replace(3, 6, "AB");
+
+StringBuffer sb4 = new StringBuffer("0123456");
+sb4.reverse();
+
+```
+
+
+
+
+[자바 StringBuffer setCharAt, setLength, toString, substring 메서드 정리]
+
+* void setCharAt(int index, char ch)
+    - 설명: 지정된 위치의 문자를 주어진 문자(ch)로 바꾼다.
+    - 예제: StringBuffer sb = new StringBuffer("0123456"); sb.setCharAt(5, 'o'); -> 결과: sb = "01234o6"
+
+* void setLength(int newLength)
+    - 설명: 지정된 길이로 문자열의 길이를 변경한다. 길이를 늘리는 경우에는 나머지 빈 공간을 널문자 '\u0000'로 채운다.
+    - 예제: StringBuffer sb = new StringBuffer("0123456"); sb.setLength(5); -> 결과: sb = "01234"
+    - 예제: StringBuffer sb2 = new StringBuffer("0123456"); sb2.setLength(10); String str = sb2.toString().trim(); -> 결과: sb2 = "0123456    ", str = "0123456"
+
+* String toString()
+    - 설명: StringBuffer 인스턴스의 문자열을 String으로 변환한다.
+    - 예제: StringBuffer sb = new StringBuffer("0123456"); String str = sb.toString(); -> 결과: str = "0123456"
+
+* String substring(int start) / String substring(int start, int end)
+    - 설명: 지정된 범위 내의 문자열을 String으로 뽑아서 반환한다. 시작위치(start)만 지정하면 시작위치부터 문자열 끝까지 뽑아서 반환한다.
+    - 예제: StringBuffer sb = new StringBuffer("0123456"); String str = sb.substring(3); String str2 = sb.substring(3, 5); -> 결과: str = "3456", str2 = "34"
+
+
+```java
+// StringBuffer 변경 및 변환 메서드 코드 예시
+StringBuffer sb1 = new StringBuffer("0123456");
+sb1.setCharAt(5, 'o');
+
+StringBuffer sb2 = new StringBuffer("0123456");
+sb2.setLength(5);
+
+StringBuffer sb3 = new StringBuffer("0123456");
+String convertedStr = sb3.toString();
+
+StringBuffer sb4 = new StringBuffer("0123456");
+String subStr = sb4.substring(3);
+String subStr2 = sb4.substring(3, 5);
+
+```
+
+
